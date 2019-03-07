@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+    id : Plugin識別碼 (for add/remove)
+    version : Plugin版本
+    0.0.1 create plugin with android source
+    0.0.2 call .so to open file and success
+    0.0.3 add new APIs
+    0.1.0 add ios lib and hooks for install/uninstall
+    0.1.1 add test pdf file
+    0.1.2 add SwiftyJSON lib, final openPDF API, final getTotalPages API
+    0.1.3 modify add_xcconfig to support multiple header and lib pathes
+    0.1.4 implement android openPDF, insertImagePath, closePDF
+    0.2.0 add pdf-extension lib and third party include headers, pdf lib has inserted images successed.
+    0.2.1 modify remove_xcconfig to support multiple header and lib pathes
+    0.2.2 remove ios unnecessary headers
+    0.2.3 add new lib with pdf-extension, remove wrapper files
+    0.2.4 add path param to closePDF
+    0.2.5 update android .so library
+    0.3.0 update ios lib to 1.11, add openPDFforSVG, getPDFforSVG, getPDFforSVGTotalPages, closePDFforSVG to get SVG
+    0.3.1 update ios libs to support simulator x86_64 arch
+    0.3.2 update android lib to 1.11 
+    0.3.3 android support all APIs in iOS 
+    0.3.4 fix android wrapper bug
+    0.3.5 iOS No applicable devices found https://github.com/fastlane/fastlane/issues/8737, rebuilt without bitcode;  add NOCJK to MuPDF xcconfig to reduce file size
+    0.3.6 update android.mk
+    0.3.7 fix JNI error
+    0.3.8 add new EscapeUtils.java for Typescript decodeURIComponent compatibility
+    0.3.9 fix EscapeUtils.java errorand add NOCJK to android lib
+    0.3.10 support file and buffer output, and support PNG
+    0.3.11 fix JNI error, mupdf_main recall error
+    0.3.12 add dimention API and return info when open
+    0.4.0 fix major errors in iOS and android wrapper, only dimension not work.
+    0.4.1 add checks on wrapper to prevent crash
+          add resolution to getSVG and getPNG for different size ouput
+          fix ios path not encoding and crash
+    0.4.2 fix android file checking error
+          add CJK fonts for showing Chinese char
+    0.4.3 in config.h use TOFU_CJK_LANG to skip CJK language specific fonts
+    0.5.0 fix warnings in MuPDF wrapper to prevent C errors
+    0.5.1 add headers and makfile trying to build ghostscript
+          fix iOS openPDF, closePDF file handling
+    0.5.2 fix android insertImage from Document to PDFDocument
+          fix android getTotalPages not implement
+          modify closePDF API
+    0.5.3 fix android closePDF bug
+    0.5.4 fix android wrapper memory leak
+    0.5.5 fix iOS insertImagePath rect not correctly
+          fix iOS closePDF file system dectect error and always return false
+          fix android closePDF releasing memory
+          fix iOS openPDF return JSON URLencode not recognized in TS
+          modify android openPDF return JSON with URLencode
+    0.5.6 fix android pdfDoc not recycled
+    0.5.7 add setPNGPathFullForExport API to fix android export crash
+          modify closePDFforExport to support save file
+    0.5.8 fix android import crash
+    0.5.9 fix iOS closePDFforExport not properly
+    0.5.10 add decodeURIComponent to EscapeUtils
+    0.5.11 fix blended mode has no alpha value
+    0.5.12 fix bold font export for SVG
+    0.5.13 fix currupt PNG ouput
+    0.5.14 fix PDF output z-index error, it's not layer! it's blending to normal
+    0.5.15 remove log
+    0.5.16 fix crash when generating SVG
+    0.5.17 remove native log
+    0.5.18 fz_drop_buffer cause crash, modify to prevent drop null buffer
+    0.5.19 fix android open PDF crash if path is invalid
+    0.5.20 rebuild in new android build tools
+    0.5.21 update DrawingPDF.js for lint
+    0.5.22 discard hook, instead of using cordova-plugin-add-swift-support
+    0.5.23 fix Bridgr header missing using cordova-plugin-add-swift-support
+    0.5.24 fix Bridgr header error
+    0.5.25 fix installer error
+    0.5.26 fix iOS file read/write error (without scheme file://)
+    0.5.27 fix -1 problem in API delivery (barney found it make iOS crashing)
+    0.5.28 update SwiftyJSON and modify for new key/value
+    0.5.29 update SwiftyJSON for swift 3/4
+    0.5.30 update SwiftyJSON for removing by key or by index
+    0.5.31 change log
+-->
+<plugin id="com.kcchen.drawingpdf" version="0.5.31" 
+    xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>DrawingPDF</name>
+    <keywords>cordova,drawing,PDF</keywords>
+    <license>MIT</license>
+    <author>KC Chen (kowei.chen@gmail.com)</author>
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+    <DESCRIPTION>Drawing PDF PLugin</DESCRIPTION>
+    <js-module name="DrawingPDF" src="www/DrawingPDF.js">
+        <merges target="DrawingPDF" />
+    </js-module>
+    <!--<asset src="assets/PenAppTasks.pdf" target="assets/PenAppTasks.pdf" />-->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <!--
+                讓 Cordova 認識這個 Plugin，value 是對應到的 java 程式
+            -->
+            <feature name="DrawingPDF">
+                <param name="android-package" value="com.kcchen.drawingpdf.DrawingPDF"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/libs/armeabi-v7a/libmupdf_java32.so" target-dir="libs/armeabi-v7a" framework="true" />
+        <source-file src="src/android/DrawingPDF.java" target-dir="src/com/kcchen/drawingpdf" />
+        <source-file src="src/android/EscapeUtils.java" target-dir="src/com/kcchen/drawingpdf" />
+        <source-file src="src/android/com/artifex" target-dir="src/com/" />
+    </platform>
+    <platform name="ios">
+        <hook src="hooks/add_xcconfig.js" type="after_plugin_install" />
+        <hook src="hooks/remove_xcconfig.js" type="before_plugin_uninstall" />
+        <config-file parent="/*" target="config.xml">
+            <feature name="DrawingPDF">
+                <param name="ios-package" value="DrawingPDF" />
+            </feature>
+        </config-file>
+        <source-file src="src/ios/lib/libmupdf.a" target-dir="lib" framework="true" />
+        <source-file src="src/ios/lib/libmupdfthird.a" target-dir="lib" framework="true" />
+        <source-file src="src/ios/contrib/SwiftyJSON/SwiftyJSON.swift" target-dir="contrib/SwiftyJSON"/>
+        <source-file src="src/ios/DrawingPDF.swift" />
+        <header-file src="src/ios/include/mupdf" />
+        <!-- <header-file src="src/ios/PenPal-Bridging-Header.h" target-dir="" /> -->
+        <!-- <dependency id="cordova-plugin-add-swift-support" version="1.6.0"/> -->
+    </platform>
+</plugin>

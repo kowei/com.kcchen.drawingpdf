@@ -1,0 +1,26 @@
+{
+    "private": true,
+    "name": "com.kcchen.drawingpdf",
+    "cordova_name": "DrawingPDF",
+    "version": "0.5.31",
+    "description": "Drawing PDF for Cordova",
+    "types": "./types/index.d.ts",
+    "cordova": {
+        "id": "com.kcchen.drawingpdf",
+        "platforms": [
+            "android",
+            "ios"
+        ]
+    },
+    "main": "./www/DrawingPDF.js",
+    "keywords": [
+        "cordova",
+        "drawing",
+        "PDF",
+        "ecosystem:cordova",
+        "cordova-android",
+        "cordova-ios"
+    ],
+    "author": "KC Chen (kowei.chen@gmail.com)",
+    "license": "MIT"
+}
