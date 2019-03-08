@@ -12,7 +12,7 @@ install it via cordova cli
 
 
 notice:
-this plugin has not commit to public repository, please install locally.
+this plugin has not commit to public repository, please install locally. The PDF C lib is folk from MuPDF with modified wrapper and some fixs. Due to the file limitation on GitHub, iOS doesn't has complete .a files inside. 
 
 ## Usage
 
